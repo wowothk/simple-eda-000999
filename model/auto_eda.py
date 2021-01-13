@@ -20,11 +20,11 @@ def main_overview(dataframe):
     type_list = []
     for variable in variables_name:
         if variable in categorical_variables: 
-            type_list.append("CATEGORICAL")
+            type_list.append("Categorical")
         elif variable in numeric_variables:
-            type_list.append("NUMERIC")
+            type_list.append("Numeric")
         else:
-            type_list.append("UNKNOWN")
+            type_list.append("unknown")
 
 
     stat["number_variables"] = dataframe.shape[1]
@@ -54,7 +54,7 @@ def series_detail_stat(series, stat_info):
     detail_stat_info = stat_info["detail_info"]
     
 
-    if stat_info["data_type"] == "CATEGORICAL":
+    if stat_info["data_type"] == "Categorical":
         
         if stat_info["unique"] > 5:
             top_unique_variable = series.value_counts()[:5].index.tolist()

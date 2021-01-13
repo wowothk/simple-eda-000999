@@ -5,6 +5,8 @@ name = "pypi"
 
 [packages]
 streamlit-echarts = "*"
+seaborn = "*"
+matplotlib = "*"
 
 [dev-packages]
 

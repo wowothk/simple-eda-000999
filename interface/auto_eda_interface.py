@@ -1,12 +1,10 @@
 import pandas as pd
 import streamlit as st
 from streamlit_echarts import st_echarts
+import seaborn as sns
+import matplotlib.pyplot as plt
 
 from model.auto_eda import main_overview, series_stat
-
-from pyecharts.charts import Bar
-from pyecharts import options as opts
-import streamlit.components.v1 as components
 
 def overview_interface(dataframe):
     stat, type_list = main_overview(dataframe)
@@ -38,8 +36,8 @@ def variables_overview_interface(series,type_list):
 
     # var_stat1, var_stat2, var_dis = st.beta_columns(3)
 
-    if var_stat["data_type"] == "NUMERIC":
-        var_stat1, var_stat2 = st.beta_columns(2)
+    if var_stat["data_type"] == "Numeric":
+        var_stat1, var_stat2, var_his = st.beta_columns(3)
         #Statistic 1
         var_stat1.write(f' Max      : {var_stat["detail_info"]["max"]}')
         var_stat1.write(f' 95%      : {var_stat["detail_info"]["95%"]}')      
@@ -60,11 +58,20 @@ def variables_overview_interface(series,type_list):
         var_stat2.write(f' Sum      : {var_stat["detail_info"]["sum"]}')  
         var_stat2.write(f' cv       : {var_stat["detail_info"]["cv"] }')
 
+        # #Histogram
+        # fig, ax = plt.subplots()
+        # if var_stat["unique"] > 10 and peretage_unique > 0.1:
+        #     ax.hist(series, bins=10)
+        # else:
+        #     ax.hist(series)
+        
+        # var_his.pyplot(fig)
+
         distribution_plot_options = distribution_plot(var_stat["detail_info"]["data_distribution"])
         with st.beta_expander("See data distribution"):
             st_echarts(distribution_plot_options) 
 
-    elif var_stat["data_type"] == "CATEGORICAL":
+    elif var_stat["data_type"] == "Categorical":
         var_stat1, var_stat2 = st.beta_columns(2)
         var_stat1.dataframe(var_stat["detail_info"]["data_distribution"])
         freq_data_plot_options = freq_data_plot(var_stat["detail_info"]["data_distribution"])
@@ -127,3 +134,20 @@ def distribution_plot(data_distribution):
     } 
 
     return options
+
+
+def heatmap_data(dataframe, variables_name, type_list):
+    valid_variables = []
+    for i in range(len(type_list)):
+        if type_list[i] == "NUMERIC" or type_list[i] == "CATEGORICAL":
+            valid_variables.append(variables_name[i])
+
+    corr_data = dataframe[valid_variables].corr()
+    
+    fig, ax = plt.subplots(figsize=(9,9))
+    sns.heatmap(corr_data, annot=True, linewidth=1, ax=ax ,annot_kws={"fontsize":8})
+    plt.savefig("img/temp_heatmap.png")
+
+    st.markdown("## Heatmap")
+    st.image("img/temp_heatmap.png")
+
