@@ -11,6 +11,8 @@ def load_autoEDA(df):
     for i in range(len(variables_name)):
         st.markdown(f"### {variables_name[i]} ")
         variables_overview_interface(df[variables_name[i]], type_list[i])
+    
+    
         
 
 
