@@ -1,7 +1,7 @@
 import streamlit as st
 
 from interface.data_management_interface import upload_dataset
-from interface.auto_eda_interface import overview_interface, variables_overview_interface
+from interface.auto_eda_interface import overview_interface, variables_overview_interface, heatmap_data
 
 def load_autoEDA(df):
     variables_name = df.columns.tolist()
@@ -11,6 +11,10 @@ def load_autoEDA(df):
     for i in range(len(variables_name)):
         st.markdown(f"### {variables_name[i]} ")
         variables_overview_interface(df[variables_name[i]], type_list[i])
+    
+    heatmap_data(df, variables_name, type_list)
+    
+    
         
 
 

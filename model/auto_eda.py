@@ -20,11 +20,11 @@ def main_overview(dataframe):
     type_list = []
     for variable in variables_name:
         if variable in categorical_variables: 
-            type_list.append("CATEGORICAL")
+            type_list.append("Categorical")
         elif variable in numeric_variables:
-            type_list.append("NUMERIC")
+            type_list.append("Numeric")
         else:
-            type_list.append("UNKNOWN")
+            type_list.append("unknown")
 
 
     stat["number_variables"] = dataframe.shape[1]
@@ -54,7 +54,7 @@ def series_detail_stat(series, stat_info):
     detail_stat_info = stat_info["detail_info"]
     
 
-    if stat_info["data_type"] == "CATEGORICAL":
+    if stat_info["data_type"] == "Categorical":
         
         if stat_info["unique"] > 5:
             top_unique_variable = series.value_counts()[:5].index.tolist()
@@ -87,6 +87,20 @@ def series_detail_stat(series, stat_info):
             detail_stat_info["skew"] = round(series.skew(),3)
             detail_stat_info["sum"] = series.sum().tolist()
             detail_stat_info["cv"] = round(detail_stat_info["std"] / detail_stat_info["average"],3) if detail_stat_info["average"] else null
+
+            if not isinstance(series, np.float64):
+                unique_variable = series.value_counts().index.tolist()
+                unique_tot = series.value_counts().tolist()
+                zipped_lists = zip(unique_variable, unique_tot)
+                sorted_pairs = sorted(zipped_lists)
+
+                tuples = zip(*sorted_pairs)
+                unique_variable, unique_tot = [ list(tuple) for tuple in  tuples]
+
+                detail_stat_info["data_distribution"] = dict()
+                detail_stat_info["data_distribution"]["Unique_var"] = unique_variable
+                detail_stat_info["data_distribution"]["Unique_Tot"] = unique_tot
+                
     else:
         detail_stat_info["data_distribution"] = "error, unknown data type"
 
