@@ -139,7 +139,7 @@ def distribution_plot(data_distribution):
 def heatmap_data(dataframe, variables_name, type_list):
     valid_variables = []
     for i in range(len(type_list)):
-        if type_list[i] == "NUMERIC" or type_list[i] == "CATEGORICAL":
+        if type_list[i] == "Numeric" or type_list[i] == "Categorical":
             valid_variables.append(variables_name[i])
 
     corr_data = dataframe[valid_variables].corr()

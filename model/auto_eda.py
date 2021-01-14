@@ -69,7 +69,7 @@ def series_detail_stat(series, stat_info):
         detail_stat_info["data_distribution"]["Unique_var"] = top_unique_variable
         detail_stat_info["data_distribution"]["Unique_Tot"] = top_unique_tot
 
-    elif stat_info["data_type"] == "NUMERIC":
+    elif stat_info["data_type"] == "Numeric":
             detail_stat_info["max"] = series.max().tolist()
             detail_stat_info["95%"] = series.quantile(0.95)
             detail_stat_info["Q3"] = series.quantile(0.75)
@@ -86,7 +86,7 @@ def series_detail_stat(series, stat_info):
             detail_stat_info["kurtosis"] = round(series.kurt(),3)
             detail_stat_info["skew"] = round(series.skew(),3)
             detail_stat_info["sum"] = series.sum().tolist()
-            detail_stat_info["cv"] = round(detail_stat_info["std"] / detail_stat_info["average"],3) if detail_stat_info["average"] else null
+            detail_stat_info["cv"] = round(detail_stat_info["std"] / detail_stat_info["average"],3) if detail_stat_info["average"] else "Null"
 
             if not isinstance(series, np.float64):
                 unique_variable = series.value_counts().index.tolist()
